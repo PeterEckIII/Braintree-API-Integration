@@ -15,8 +15,8 @@
 
                 <label for="exp-month" class="hosted-fields--label">Expiration Month</label>
                 <div id="exp-month" class="hosted-field"></div>
-                <label for="exp-date-year" class="hosted-fields--label">Expiration Year</label>
-                <div id="exp-date-year" class="hosted-field"></div>
+                <label for="exp-year" class="hosted-fields--label">Expiration Year</label>
+                <div id="exp-year" class="hosted-field"></div>
 
                 <label for="cvv" class="hosted-fields--label">CVV</label>
                 <div id="cvv" class="hosted-field"></div>
@@ -32,7 +32,61 @@
             var form = document.querySelector("#card-form");
             var token = "";
 
-            
+            braintree.client.create({
+                authorization: "CLIENT_AUTHORIZATION"
+            }, function (clientError, clientInstance) {
+                if(clientError) {
+                    console.log(clientError);
+                    // Handle error
+                    return;
+                }
+                braintree.hostedFields.create({
+                    client: clientInstance,
+                    styles: {},
+                    fields: {
+                        number: {
+                            selector: "#card-number",
+                            palceholder: "5430 6950 0294 9750"
+                        },
+                        expirationMonth: {
+                            selector: "#exp-month",
+                            placeholder: "MM"
+                        },
+                        expirationYear: {
+                            selector: "#exp-year",
+                            placeholder: "YYYY"
+                        },
+                        cvv: {
+                            selector: "#cvv",
+                            placeholder: "456"
+                        },
+                        postalCode: {
+                            selector: "postal-code",
+                            placeholder: "12345"
+                        }
+                    }
+                }, function(hostedFieldsError, hostedFieldsInstance) {
+                    if(hostedFielsdError) {
+                        console.log(hostedFieldsError)
+                        // Handle error
+                        return;
+                    }
+                    submit.removeAttribute("disable");
+
+                    form.addEventListener("submit", function(event) {
+                        event.preventDefault();
+
+                        hostedFieldsInstance.tokenize(function(tokenizeError, payload) {
+                            if(tokenizeError) {
+                                console.log(tokenizeError);
+                                // Handle error
+                                return;
+                            }
+                            console.log("The nonce is: " + payload.nonce);
+                        });
+                    }, false);
+                });
+            });
         </script>
     </body>
 </html>
