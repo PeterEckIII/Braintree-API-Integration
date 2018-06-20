@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Document</title>
+        <link rel="stylesheet" href="/stylesheets/master.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <script src="https://js.braintreegateway.com/web/3.34.0/js/client.min.js"></script>
+        <script src="/Users/petereck/Desktop/braintree_challenge/controllers/main.js"></script>
+    </head>
+    <body>
+        <div class="container checkout">
+            <form action="/checkout" method="POST" id="card-form">
+
+                <label for="first-name" class="hosted-fields--label">First Name</label>
+                <div contenteditable="true" id="first-name" class="hosted-field" name="firstName"></div>
+
+                <label for="last-name" class="hosted-fields--label">Last Name</label>
+                <div contenteditable="true" id="last-name" class="hosted-field" name="lastName"></div>
+
+                <label for="card-number" class="hosted-fields--label">Card Number</label>
+                <div contenteditable="true" id="card-number" class="hosted-field"></div>
+
+                <label for="exp-month" class="hosted-fields--label">Expiration Month</label>
+                <div contenteditable="true" id="exp-month" class="hosted-field"></div>
+
+                <label for="exp-year" class="hosted-fields--label">Expiration Year</label>
+                <div contenteditable="true" id="exp-year" class="hosted-field"></div>
+
+                <label for="cvv" class="hosted-fields--label">CVV</label>
+                <div contenteditable="true" id="cvv" class="hosted-field"></div>
+
+                <label for="postal-code" class="hosted-fields--label">Postal Code</label>
+                <div contenteditable="true" id="postal-code" class="hosted-field"></div>
+
+                <label for="amount" class="hosted-fields--label">Amount</label>
+                <div contenteditable="true" id="amount" class="hosted-field"></div>
+
+                <input id="nonce" type="hidden" name="payment_method_nonce">
+                <div class="button-container">
+                    <input type="submit" class="button button--small button--green" value="Buy" id="submit-button">
+                </div>
+            </form>
+        </div>
+        <script>
+            initializeBraintree();
+        </script>
+    </body>
+</html>
+
