@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Document</title>
+        <script src="https://js.braintreegateway.com/web/3.34.0/js/client.min.js"></script>
+    </head>
+    <body>
+        <div class="container checkout">
+            <form action="/checkouts" method="POST" id="card-form">
+                <label for="card-number" class="hosted-fields--label">Card Number</label>
+                <div id="card-number" class="hosted-field"></div>
+
+                <label for="exp-month" class="hosted-fields--label">Expiration Month</label>
+                <div id="exp-month" class="hosted-field"></div>
+                <label for="exp-date-year" class="hosted-fields--label">Expiration Year</label>
+                <div id="exp-date-year" class="hosted-field"></div>
+
+                <label for="cvv" class="hosted-fields--label">CVV</label>
+                <div id="cvv" class="hosted-field"></div>
+
+                <label for="postal-code" class="hosted-fields--label">Postal Code</label>
+                <div id="postal-code" class="hosted-field"></div>
+                <div class="button-container">
+                    <input type="submit" class="button button--small button--green" value="Buy" id="submit-button">
+                </div>
+            </form>
+        </div>
+        <script>
+            var form = document.querySelector("#card-form");
+            var token = "";
+
+            
+        </script>
+    </body>
+</html>
+
