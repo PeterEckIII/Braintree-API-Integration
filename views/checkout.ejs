@@ -44,10 +44,8 @@
                             <div id="postal-code" class="hosted-field form-control" name="postal-code"></div>
                         </div>
                     </div>
-                    <input id="nonce" type="hidden" name="payment_method_nonce">
-                    <div class="button-div">
-                        <input type="submit" class="btn btn-success btn-lg text-center" id="pay-button" value="Pay" disabled>
-                    </div>
+                    <input type="hidden" id="nonce" name="payment_method_nonce">
+                    <input type="submit" class="btn btn-success btn-lg text-center" id="pay-button" value="Pay">
                 </form>
             </div>
         </div>
@@ -56,6 +54,8 @@
         <script>
             var form = document.querySelector("#card-form");
             var submit = document.querySelector("#pay-button");
+            var nonce = document.querySelector("#nonce");
+            console.log(nonce);
 
             braintree.client.create({
                 authorization: "sandbox_t4qgfw7s_7nzxrq4pc2ttg38j",
@@ -88,11 +88,10 @@
                 }
                 braintree.hostedFields.create(options, function (hostedFieldsError, hostedFieldsInstance) {
                     if (hostedFieldsError) {
-                        // Handle error
-                        console.log("Hosted Fields Error!");
+                        console.error(hostedFieldsError);
                         return;
                     }
-                    console.log(hostedFieldsInstance);
+
                     submit.removeAttribute("disabled");
 
                     form.addEventListener("submit", function (event) {
@@ -100,15 +99,13 @@
 
                         hostedFieldsInstance.tokenize(function (tokenizeError, payload) {
                             if (tokenizeError) {
-                                // Handle error
-                                console.error("Tokenize Error!");
+                                console.error(tokenizeError);
                                 return;
                             }
-                            console.log(payload);
-                            console.log("The nonce is: " + payload.nonce);
                             document.querySelector("#nonce").value = payload.nonce;
+                            form.submit(payload.nonce);
                         });
-                    });
+                    }, false);
                 });
             });
         </script>

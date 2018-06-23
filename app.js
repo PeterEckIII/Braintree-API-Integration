@@ -54,26 +54,36 @@ app.get("/checkout", function(req, res) {
 app.post("/checkout", function(req, res) {
     var nonceFromTheClient = req.body.payment_method_nonce;
     console.log("The nonce is: " + nonceFromTheClient);
+
     gateway.customer.create({
         firstName: "New",
         lastName: "Customer",
         paymentMethodNonce: nonceFromTheClient,
-        options: {
-            verifyCard: true,
+        creditCard : {
+            options: {
+                verifyCard: true,
+            }
         }
     }, function(error, result) {
         if(error) {
             console.log("Customer create error");
             return;
         }
-        console.log("The customer ID is: " + customerId);
-
+        var customerId = result.customer.id;
         gateway.transaction.sale({
-            amount: "$10",
-            paymentMethodNonce: result.customer.paymentMethods[0].token,
+            amount: "25.99",
+            customerId: customerId,
+            paymentMethodNonce: result.customer.paymentMethods[0].nonce,
             options: {
                 submitForSettlement: true,
                 storeInVaultOnSuccess: true
+            }
+        }, function(transactionError, transactionResult) {
+            if(transactionResult.success) {
+                console.log("Transaction successful!");
+            }
+            else {
+                console.log("Transaction error: " + transactionError);
             }
         });
     });
@@ -82,6 +92,6 @@ app.post("/checkout", function(req, res) {
 
 app.listen(3000, function(req, res) {
     console.log("Started the server...");
-})
+});
 
 module.exports = app;
