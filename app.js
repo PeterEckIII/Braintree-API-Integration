@@ -29,9 +29,9 @@ app.use(function(req, res, next) {
 // Creating gateway with Sandbox credentials
 var gateway = braintree.connect({
     environment: braintree.Environment.Sandbox,
-    merchantId: "7nzxrq4pc2ttg38j",
-    publicKey: "9p82fdb76b85n64w",
-    privateKey: "a6fc1c85412a8ee854bcc098e60a31ad"
+    merchantId: process.env.MERCHANTID,
+    publicKey: process.env.PUBLICKEY,
+    privateKey: process.env.PRIVATEKEY
 });
 
 app.get("/", function(req, res) {
@@ -91,7 +91,7 @@ app.post("/checkout", function(req, res) {
     });
 });
 
-app.listen(3000, function(req, res) {
+app.listen(process.env.PORT || 3000, function(req, res) {
     console.log("Started the server...");
 });
 
