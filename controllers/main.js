@@ -1,8 +1,9 @@
-var form = document.querySelector("#card-form");
-var submit = document.querySelector('input[type="submit"]');
-var nonce = document.querySelector("#nonce");
-
 function initializeBraintree() {
+    var form = document.querySelector("#card-form");
+    var submit = document.querySelector("#pay-button");
+    var nonce = document.querySelector("#nonce");
+    console.log(nonce);
+
     braintree.client.create({
         authorization: "sandbox_t4qgfw7s_7nzxrq4pc2ttg38j",
     }, function (clientError, clientInstance) {
@@ -11,7 +12,7 @@ function initializeBraintree() {
             console.log("Client error!");
             return;
         }
-        braintree.hostedFields.create({
+        var options = {
             client: clientInstance,
             fields: {
                 number: {
@@ -31,24 +32,25 @@ function initializeBraintree() {
                     placeholder: "60606"
                 }
             }
-        }, function (hostedFieldsError, hostedFieldsInstance) {
+        }
+        braintree.hostedFields.create(options, function (hostedFieldsError, hostedFieldsInstance) {
             if (hostedFieldsError) {
-                // Handle error
-                console.log("Hosted Fields Error!");
+                console.error(hostedFieldsError);
                 return;
             }
+
             submit.removeAttribute("disabled");
+
             form.addEventListener("submit", function (event) {
                 event.preventDefault();
 
                 hostedFieldsInstance.tokenize(function (tokenizeError, payload) {
                     if (tokenizeError) {
-                        // Handle error
-                        console.log("Tokenize Error!");
+                        console.error(tokenizeError);
                         return;
                     }
-                    console.log("The nonce is: " + payload.nonce);
-                    nonce.setAttribute("value", payload.nonce);
+                    document.querySelector("#nonce").value = payload.nonce;
+                    form.submit(payload.nonce);
                 });
             }, false);
         });
