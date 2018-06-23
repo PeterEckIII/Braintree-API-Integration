@@ -1,9 +1,76 @@
-
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
 
 .hosted-fields--label {
-    color: red;
+    font-family: Monospace sans-serif;
 }
 
-div .hosted-field {
-    width: 25%;
+.hosted-field {
+    border: 1px solid #DBE8E7;
+    box-shadow: 2px 2px #DBE8E7;
+    width: 200%;
+    padding: 5px;
+    margin-bottom: 15%;
+    height: 50px;
 }
+
+.hosted-field:focus {
+    outline: 0;    
+}
+
+.hosted-field:nth-of-type(6) {
+    width: 75%;
+}
+
+.hosted-field:nth-of-type(7) {
+    width: 100%;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+#checkout-title {
+    text-align: center;
+    font-family: "PT Sans", sans-serif;
+    font-size: 70px;
+}
+
+.jumbo-div {
+    display: flex;
+    justify-content: center;
+}
+
+.jumbotron {
+    width: 75%;
+}
+
+button {
+    width: 150%;
+}
+
+.empty-space {
+    height: 100px;
+}
+
+.panel {
+    width: 65%;
+}
+
+.btn {
+    width: 400%;
+}
+
+.card {
+    width: 50%;
+    margin: 0 auto;
+}
+
+.button-div {
+    margin: 0 auto;
+}
+

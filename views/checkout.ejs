@@ -4,49 +4,120 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>Document</title>
+        <title>Braintree Challenge</title>
         <link rel="stylesheet" href="/stylesheets/master.css">
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-        <script src="https://js.braintreegateway.com/web/3.34.0/js/client.min.js"></script>
-        <script src="/Users/petereck/Desktop/braintree_challenge/controllers/main.js"></script>
+        <link rel="stylesheet" href="../controllers/main.js">
+        <nav class="navbar navbar-dark bg-dark">
+            <a class="navbar-brand" href="/">Braintree</a>
+        </nav>
+
     </head>
     <body>
-        <div class="container checkout">
-            <form action="/checkout" method="POST" id="card-form">
-
-                <label for="first-name" class="hosted-fields--label">First Name</label>
-                <div contenteditable="true" id="first-name" class="hosted-field" name="firstName"></div>
-
-                <label for="last-name" class="hosted-fields--label">Last Name</label>
-                <div contenteditable="true" id="last-name" class="hosted-field" name="lastName"></div>
-
-                <label for="card-number" class="hosted-fields--label">Card Number</label>
-                <div contenteditable="true" id="card-number" class="hosted-field"></div>
-
-                <label for="exp-month" class="hosted-fields--label">Expiration Month</label>
-                <div contenteditable="true" id="exp-month" class="hosted-field"></div>
-
-                <label for="exp-year" class="hosted-fields--label">Expiration Year</label>
-                <div contenteditable="true" id="exp-year" class="hosted-field"></div>
-
-                <label for="cvv" class="hosted-fields--label">CVV</label>
-                <div contenteditable="true" id="cvv" class="hosted-field"></div>
-
-                <label for="postal-code" class="hosted-fields--label">Postal Code</label>
-                <div contenteditable="true" id="postal-code" class="hosted-field"></div>
-
-                <label for="amount" class="hosted-fields--label">Amount</label>
-                <div contenteditable="true" id="amount" class="hosted-field"></div>
-
-                <input id="nonce" type="hidden" name="payment_method_nonce">
-                <div class="button-container">
-                    <input type="submit" class="button button--small button--green" value="Buy" id="submit-button">
-                </div>
-            </form>
+        <div class="jumbo-div">
+            <h1 class="jumbotron" id="checkout-title">Checkout</h1>
         </div>
+        <div class="card">
+            <div class="card-header">
+                Payment Details
+            </div>
+            <div class="card-body">
+                <form action="/checkout" method="POST" id="card-form">
+                    <div class="row">
+                        <div class="form-group col-sm-6">
+                            <label for="card-number" class="hosted-fields--label">Card Number</label>
+                            <div id="card-number" class="hosted-field form-control" name="card-number"></div>
+                        </div>
+                        <div class="form-group col-sm-4">
+                            <label for="expiration-date" class="hosted-fields--label">Expiration Date</label>
+                            <div id="expiration-date" class="hosted-field form-control" name="expiration-date"></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-sm-6">
+                            <label for="cvv" class="hosted-fields--label">CVV</label>
+                            <div id="cvv" class="hosted-field form-control" name="cvv"></div>
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label for="postal-code" class="hosted-fields--label">Postal Code</label>
+                            <div id="postal-code" class="hosted-field form-control" name="postal-code"></div>
+                        </div>
+                    </div>
+                    <input id="nonce" type="hidden" name="payment_method_nonce">
+                    <div class="button-div">
+                        <input type="submit" class="btn btn-success btn-lg text-center" id="pay-button" value="Pay" disabled>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <script src="https://js.braintreegateway.com/web/3.34.0/js/client.min.js"></script>
+        <script src="https://js.braintreegateway.com/web/3.34.0/js/hosted-fields.min.js"></script>
         <script>
-            initializeBraintree();
+            var form = document.querySelector("#card-form");
+            var submit = document.querySelector("#pay-button");
+
+            braintree.client.create({
+                authorization: "sandbox_t4qgfw7s_7nzxrq4pc2ttg38j",
+            }, function (clientError, clientInstance) {
+                if (clientError) {
+                    // Handle error
+                    console.log("Client error!");
+                    return;
+                }
+                var options = {
+                    client: clientInstance,
+                    fields: {
+                        number: {
+                            selector: "#card-number",
+                            placeholder: "4111 1111 1111 1111"
+                        },
+                        cvv: {
+                            selector: "#cvv",
+                            placeholder: "750"
+                        },
+                        expirationDate: {
+                            selector: "#expiration-date",
+                            placeholder: "12/2021"
+                        },
+                        postalCode: {
+                            selector: "#postal-code",
+                            placeholder: "60606"
+                        }
+                    }
+                }
+                braintree.hostedFields.create(options, function (hostedFieldsError, hostedFieldsInstance) {
+                    if (hostedFieldsError) {
+                        // Handle error
+                        console.log("Hosted Fields Error!");
+                        return;
+                    }
+                    console.log(hostedFieldsInstance);
+                    submit.removeAttribute("disabled");
+
+                    form.addEventListener("submit", function (event) {
+                        event.preventDefault();
+
+                        hostedFieldsInstance.tokenize(function (tokenizeError, payload) {
+                            if (tokenizeError) {
+                                // Handle error
+                                console.error("Tokenize Error!");
+                                return;
+                            }
+                            console.log(payload);
+                            console.log("The nonce is: " + payload.nonce);
+                            document.querySelector("#nonce").value = payload.nonce;
+                        });
+                    });
+                });
+            });
         </script>
     </body>
+
+    <div class="empty-space"></div>
+
+    <div class="card-footer text-muted">
+        Braintree Coding Challenge
+    </div>
 </html>
 
