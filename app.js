@@ -10,7 +10,7 @@ var express         = require("express"),
 // Setting up the app
 app.set("views", path.join(__dirname, "/views"));
 app.set("view engine", "ejs");
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json())
 app.use(flash());
 app.use(express.static(__dirname + "/public"));
