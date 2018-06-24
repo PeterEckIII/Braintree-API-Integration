@@ -19,7 +19,6 @@ router.get("/checkout", function (req, res) {
     gateway.clientToken.generate({}, function (error, response) {
         var clientToken = response.clientToken;
         if (error) {
-            req.flash("error", "There was a problem processing the request. Please reload the page and try again");
             console.log(error);
         }
         res.render("checkout", { clientToken: clientToken });
@@ -41,6 +40,7 @@ router.post("/checkout", function (req, res) {
     }, function (error, result) {
         if (!result.success) {
             console.log("Customer create error. Redirected to checkout page");
+            req.flash("error", "There was a problem registering your payment. Please try again");
             res.redirect("/checkout");
         } else {
             var customerId = result.customer.id;
@@ -57,11 +57,17 @@ router.post("/checkout", function (req, res) {
                     console.log("Transaction successful!");
                 } else {
                     console.log("Transaction error: " + transactionError);
+                    req.flash("error", "There was an issue with your transaction. Please try again");
+                    res.redirect("/checkout");
                 }
             });
-            res.render("confirmation");
+            res.redirect("/confirmation");
         }
     });
+});
+
+router.get("/confirmation", function(req, res) {
+    res.render("confirmation");
 });
 
 module.exports = router;
