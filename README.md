@@ -31,3 +31,9 @@ An integration with Braintree's API for secure online payments.
 
 *Note: You can enter a port, or navigate to localhost:3000 to connect*
 
+
+### Initiate
+
+Once the dependencies have been downloaded and the environment variables have been set, run the following command to launch the app:
+
+`npm run start`
