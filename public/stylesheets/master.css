@@ -2,6 +2,10 @@ p {
     text-align: center;
 }
 
+i {
+    margin-bottom: 5%;
+}
+
 .hosted-fields--label {
     font-family: Monospace sans-serif;
 }
@@ -71,6 +75,10 @@ button {
 
 .confirmation {
     color: green;
+}
+
+i {
+    font-size: 60px;
 }
 
 .container {

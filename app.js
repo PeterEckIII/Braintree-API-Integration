@@ -10,7 +10,7 @@ var express         = require("express"),
 
 // Setting up the app
 app.use(session({
-    secret: "my_secret",
+    secret: process.env.SECRET,
     saveUninitialized: true,
     resave: true
 }));
