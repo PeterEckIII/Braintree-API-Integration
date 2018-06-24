@@ -41,7 +41,6 @@ router.post("/checkout", function (req, res) {
     }, function (error, result) {
         if (!result.success) {
             console.log("Customer create error. Redirected to checkout page");
-            req.flash("error", "There was a problem registering you. Please ensure you entered the correct information");
             res.redirect("/checkout");
         } else {
             var customerId = result.customer.id;
@@ -57,7 +56,6 @@ router.post("/checkout", function (req, res) {
                 if (transactionResult.success) {
                     console.log("Transaction successful!");
                 } else {
-                    req.flash("error", "There was a problem processing the transaction. Please ensure your payment information is correct and try again");
                     console.log("Transaction error: " + transactionError);
                 }
             });

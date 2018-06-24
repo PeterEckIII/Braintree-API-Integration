@@ -15,14 +15,13 @@ app.use(session({
     saveUninitialized: true,
     resave: true
 }));
-
+app.use(flash());
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "/views"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json())
 app.use(express.static(__dirname + "/public"));
-app.use(flash());
-app.use("/", routes);
+app.use(routes);
 app.use(function(req, res, next) {
     res.locals.error = req.flash("error");
     next();
