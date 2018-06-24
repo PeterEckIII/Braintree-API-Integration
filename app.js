@@ -22,18 +22,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json())
 app.use(express.static(__dirname + "/public"));
 app.use(flash());
-
+app.use("/", routes);
 app.use(function(req, res, next) {
     res.locals.error = req.flash("error");
     next();
-});
-
-// Creating gateway with Sandbox credentials
-var gateway = braintree.connect({
-    environment: braintree.Environment.Sandbox,
-    merchantId: process.env.MERCHANTID,
-    publicKey: process.env.PUBLICKEY,
-    privateKey: process.env.PRIVATEKEY
 });
 
 app.listen(process.env.PORT || 3000, function(req, res) {

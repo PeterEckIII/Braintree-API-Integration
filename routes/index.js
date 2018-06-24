@@ -1,6 +1,14 @@
 var express = require("express"),
+    braintree = require("braintree"),
     router = express.Router({ mergeParams: true });
 
+// Creating gateway with Sandbox credentials
+var gateway = braintree.connect({
+    environment: braintree.Environment.Sandbox,
+    merchantId: process.env.MERCHANTID,
+    publicKey: process.env.PUBLICKEY,
+    privateKey: process.env.PRIVATEKEY
+});
 
 router.get("/", function (req, res) {
     res.render("home");
@@ -14,9 +22,7 @@ router.get("/checkout", function (req, res) {
             req.flash("error", "There was a problem processing the request. Please reload the page and try again");
             console.log(error);
         }
-        res.render("checkout", {
-            clientToken: clientToken
-        });
+        res.render("checkout", { clientToken: clientToken });
     });
 });
 
