@@ -21,7 +21,7 @@ router.get("/checkout", function (req, res) {
         if (error) {
             console.log(error);
         }
-        res.render("checkout", { clientToken: clientToken });
+        res.render("checkout", { clientToken: clientToken, message: req.flash("error") });
     });
 });
 
